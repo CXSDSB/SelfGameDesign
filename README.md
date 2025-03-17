@@ -1,8 +1,9 @@
 🎮 2D Adventure Game
+---
+
 A 2D platformer game built with Python & Pygame, featuring character movement, obstacle challenges, and an in-game economy system.**
 This project is a personal development exercise aimed at mastering Pygame and GitHub workflow. 
 The goal is to create a **fun and interactive** game where players control a character, explore different levels, avoid obstacles, and purchase upgrades from the shop.
----
 
 🚀 Game Progress
 - ✅ Character movement & jumping
