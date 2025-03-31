@@ -2,3 +2,4 @@
 __pycache__/ # 忽略 Python 生成的缓存文件
 *.pyc        # 忽略 Python 编译的字节码文件
 *.pyo
+/.idea
