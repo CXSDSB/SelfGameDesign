@@ -1,0 +1,32 @@
+g:水库、w：水、-：空气、c：金币、e：敌人、x：地面
+main.py
+  ↓
+Game类（core.py）
+  ├── 加载 Player（Player.py）
+  ├── 加载 UI（ui.py）
+  ├── 加载 Map/mStart.py（初始地图）
+  └── 加载 obstacles.py（障碍）
+        ↓
+Game.run() 进入游戏循环
+        ↓
+事件处理 → 更新玩家 → 检查碰撞 → 渲染画面
+
+关卡2:
+主角 Player 出生在坡下
+   ↓
+玩家走向 Button（机关）
+   ↓
+Button.on_activate() → 调用 shooter.fire()
+   ↓
+Shooter 发射 projectile（子弹）
+   ↓
+Projectile 击中 BreakableBlock（上方水池底）
+   ↓
+BreakableBlock.destroy() → 创建 WaterStream
+   ↓
+WaterStream 流到底部 → 自动生成 WaterPool
+   ↓
+Player 被判定落入水中 → 受到浮力推动 upward
+   ↓
+Player 被浮到高处平台，走向出口，通关 ✨
+

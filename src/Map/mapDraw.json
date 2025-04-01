@@ -1,0 +1,82 @@
+
+{
+ "mapS": [
+  "xxxxxxxxxxxxxxxxxxxxxxxx",
+  "xxxxxxxxxxxxxxxxxxxxxxxx",
+  "xxxxxxxxxxxxxxxxxxxxxxxx",
+  "------------------------",
+  "-----------c------------",
+  "-----c-----e------------",
+  "--------xxx--------c----",
+  "-------------------x----",
+  "----xxx------e-----x----",
+  "--------c--xxxxx--------",
+  "--xxx----------c--------",
+  "xxxxxxxxxx-----xxxxxx---",
+  "xxxxxxxxxxxxxxxxxxxxxxxx"
+],
+   "mapL1": [
+   "xxxxxxxxxxxxxxxxxxxxxxxx",
+  "xxxxxxxxxxxxxxxxxxxxxxxx",
+  "xxxxxxxxxxxxxxxxxxxxxxxx",
+  "------------------------",
+  "-----------c------------",
+  "-----c-----e------------",
+  "--------xxx--------c----",
+  "-------------------x----",
+  "----xxx------e-----x----",
+  "--------c--xxxxx--------",
+  "--xxx----------c--------",
+  "xxxxxxxxxx-----xxxxxx---",
+  "xxxxxxxxxxxxxxxxxxxxxxxx"
+],
+  "mapL2": [
+  "xxxxxxxxxggggggggxxxxxxxx",
+  "xxxxxxwwwwwwwwwwwwxxxxxxx",
+  "xxxxxxw----f------wxxxxxx",
+  "xxxxxxw----c------wxxxxxx",
+  "xxxxxxwwwwwwwwwwwwwwxxxxx",
+  "xxxxxxxxxxxxxxxxxxxxxxxxx",
+  "-------------------------",
+  "--------e------c--------x",
+  "----xxx----xxxxx-----xxxx",
+  "-------------------------",
+  "-----x-----e----------c--",
+  "xxxxxxxxxxxxxxxxxxxxxxxxx",
+  "xxxxxxxxxxxxxxxxxxxxxxxxx"
+],
+   "mapL3": [
+ "xxxxxxxxxggggggggxxxxxxxx",
+  "xxxxxxwwwwwwwwwwwwxxxxxxx",
+  "xxxxxxw----f------wxxxxxx",
+  "xxxxxxw----c------wxxxxxx",
+  "xxxxxxwwwwwwwwwwwwwwxxxxx",
+  "xxxxxxxxxxxxxxxxxxxxxxxxx",
+  "-------------------------",
+  "--------e------c--------x",
+  "----xxx----xxxxx-----xxxx",
+  "-------------------------",
+  "-----x-----e----------c--",
+  "xxxxxxxxx-----------xxxxx",
+  "xxxxx--------c--------xxx",
+  "xxxxxxxxxxxxxxxxxxxxxxxxx",
+  "lllllllllllllllllllllllll",
+  "lllllllllllllllllllllllll"
+],
+   "mapE": [
+  "xxxxxxxxxxxxxxxxxxxxxxxx",
+  "xxxxxxxxxxxxxxxxxxxxxxxx",
+  "xxxxxxxxxxxxxxxxxxxxxxxx",
+  "------------------------",
+  "-----------c------------",
+  "-----c-----e------------",
+  "--------xxx--------c----",
+  "-------------------x----",
+  "----xxx------e-----x----",
+  "--------c--xxxxx--------",
+  "--xxx----------c--------",
+  "xxxxxxxxxx-----xxxxxx---",
+  "xxxxxxxxxxxxxxxxxxxxxxxx"
+]
+}
+

@@ -1,0 +1,46 @@
+#导入如果不是逻辑动态，最好在最后全部整理放在顶部，这样比较优雅
+🧾 os 模块：处理文件、路径、系统操作的工具包
+	•	获取电脑上某个文件的路径
+	•	创建文件夹
+	•	遍历一个文件夹里的所有文件
+	•	检查一个文件存不存在
+🧾 json 模块：处理 JSON 格式数据（超重要）
+    •	游戏里的地图、存档、商店配置、技能数值……都可以用这种格式存。
+    eg.
+    json:
+    {
+         "player": {"x": 100, "y": 200},
+         "items": ["sword", "shield"],
+         "coins": 99
+    }
+    Python:
+    import json
+    # 把 Python 对象保存成 JSON 文件
+    data = {"level": 1, "coins": 50}
+    with open("save.json", "w") as f:
+    json.dump(data, f)
+
+内容：
+# 从 JSON 文件读取数据
+with open("save.json", "r") as f:
+    data_loaded = json.load(f)
+print(data_loaded["coins"])
+
+# import numpy as np 是什么？
+ Python 中最常用的 数学运算、矩阵处理和数据计算工具，尤其擅长处理：
+	•	多维数组（像数学里的矩阵）
+	•	向量化计算（比 Python for 循环快太多）
+	•	科学计算（统计、线性代数、傅里叶变换等）
+	•	随机数生成、数值模拟等
+eg.原始：
+        a = [1, 2, 3]
+        b = [4, 5, 6]
+        c = [a[i] + b[i] for i in range(len(a))]
+        print(c)  # [5, 7, 9]
+    使用numpy：
+        import numpy as np
+        a = np.array([1, 2, 3])
+        b = np.array([4, 5, 6])
+        c = a + b
+        print(c)  # [5 7 9]
+
