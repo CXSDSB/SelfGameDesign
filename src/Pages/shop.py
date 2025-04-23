@@ -3,6 +3,7 @@ import sys
 import os
 from UI.components.background_animator import BackgroundAnimator
 from UI.components.headBar import HeadBar  # ✅ 引入 HeadBar
+from Core.soundEffectManager import SoundEffectManager  # ✅ 导入新类
 
 def run_shop(player_coins=0, on_return=None):
     pygame.init()
@@ -42,7 +43,7 @@ def run_shop(player_coins=0, on_return=None):
         "skip_level": 200
     }
 
-    # ✅ 红色警告提示（商品名称 → 是否金币不足）
+    # ✅ 警告提示（商品名称 → 是否金币不足）
     show_alert = {
         "money_collect": False,
         "higher_jump": False,
@@ -70,6 +71,7 @@ def run_shop(player_coins=0, on_return=None):
                             player_coins -= prices["money_collect"]
                             show_alert["money_collect"] = False
                         else:
+                            SoundEffectManager.play_effect("select.wav")
                             print("❗ 金币不足购买 Money Collect")
                             show_alert["money_collect"] = True
                     elif 300 <= y <= 340:
@@ -79,6 +81,7 @@ def run_shop(player_coins=0, on_return=None):
                             player_coins -= prices["higher_jump"]
                             show_alert["higher_jump"] = False
                         else:
+                            SoundEffectManager.play_effect("select.wav")
                             print("❗ 金币不足购买 Higher Jump")
                             show_alert["higher_jump"] = True
                     elif 420 <= y <= 460:
@@ -88,6 +91,7 @@ def run_shop(player_coins=0, on_return=None):
                             player_coins -= prices["skip_level"]
                             show_alert["skip_level"] = False
                         else:
+                            SoundEffectManager.play_effect("select.wav")
                             print("❗ 金币不足购买 Skip Level")
                             show_alert["skip_level"] = True
 
