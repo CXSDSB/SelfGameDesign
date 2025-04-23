@@ -67,4 +67,5 @@ def run_home():
             if event.type == pygame.QUIT:
                 return None  # ✅ 不退出 pygame，让外部控制退出
 
+        # 12345
         pygame.display.flip()
