@@ -1,5 +1,3 @@
-# src/Pages/shop.py
-
 import pygame
 import sys
 import os
@@ -12,27 +10,44 @@ def run_shop(player_coins=0, on_return=None):
     pygame.display.set_caption("SHOP - NEXUS CORE")
     clock = pygame.time.Clock()
 
-    # ✅ 背景动画
     bg_animator = BackgroundAnimator(screen)
-
-    # ✅ 字体
     font_title = pygame.font.SysFont(None, 96)
     font_option = pygame.font.SysFont(None, 60)
+    font_alert = pygame.font.SysFont(None, 40)
 
-    # ✅ HeadBar：金币图标点击 → 调用 on_return() 返回原页面
     def go_back():
         print("⬅️ 从商店返回原页面")
         if on_return:
             on_return()
         nonlocal running
-        running = False  # ✅ 设置 running=False 来退出商店循环
+        running = False
 
     head_bar = HeadBar(
         screen,
         coin_count=player_coins,
-        on_go_shop=go_back,    # 再次点击金币返回
-        on_go_home=go_back     # 房子图标也返回（你也可以区分）
+        on_go_shop=go_back,
+        on_go_home=go_back
     )
+
+    shop_effects = {
+        "money_collect": False,
+        "higher_jump": False,
+        "skip_level": False
+    }
+
+    # ✅ 商品价格
+    prices = {
+        "money_collect": 50,
+        "higher_jump": 100,
+        "skip_level": 200
+    }
+
+    # ✅ 红色警告提示（商品名称 → 是否金币不足）
+    show_alert = {
+        "money_collect": False,
+        "higher_jump": False,
+        "skip_level": False
+    }
 
     running = True
     while running:
@@ -44,20 +59,62 @@ def run_shop(player_coins=0, on_return=None):
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    return
-            head_bar.handle_event(event)  # ✅ 加入点击响应
+                    running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = event.pos
+                if 420 <= x <= 900:
+                    if 220 <= y <= 260:
+                        if player_coins >= prices["money_collect"]:
+                            print("✅ 购买 Money Collect")
+                            shop_effects["money_collect"] = True
+                            player_coins -= prices["money_collect"]
+                            show_alert["money_collect"] = False
+                        else:
+                            print("❗ 金币不足购买 Money Collect")
+                            show_alert["money_collect"] = True
+                    elif 300 <= y <= 340:
+                        if player_coins >= prices["higher_jump"]:
+                            print("✅ 购买 Higher Jump")
+                            shop_effects["higher_jump"] = True
+                            player_coins -= prices["higher_jump"]
+                            show_alert["higher_jump"] = False
+                        else:
+                            print("❗ 金币不足购买 Higher Jump")
+                            show_alert["higher_jump"] = True
+                    elif 420 <= y <= 460:
+                        if player_coins >= prices["skip_level"]:
+                            print("✅ 购买 Skip Level")
+                            shop_effects["skip_level"] = True
+                            player_coins -= prices["skip_level"]
+                            show_alert["skip_level"] = False
+                        else:
+                            print("❗ 金币不足购买 Skip Level")
+                            show_alert["skip_level"] = True
+
+            head_bar.handle_event(event)
 
         bg_animator.update(dt)
         bg_animator.draw()
 
-        # ✅ 文字 UI
         title = font_title.render("SHOP", True, (255, 255, 255))
         screen.blit(title, (560, 80))
-        screen.blit(font_option.render("1. Buy Energy Core", True, (255, 255, 255)), (420, 220))
-        screen.blit(font_option.render("2. Upgrade Shield", True, (255, 255, 255)), (420, 300))
-        screen.blit(font_option.render("3. Back [ESC]", True, (200, 200, 200)), (420, 420))
 
-        # ✅ 画出头部状态栏
+        # 商品选项 + 红色感叹号提示
+        screen.blit(font_option.render("1. Money Collect - 50", True, (255, 255, 255)), (420, 220))
+        if show_alert["money_collect"]:
+            screen.blit(font_alert.render("❗", True, (255, 50, 50)), (900, 220))
+
+        screen.blit(font_option.render("2. Higher Jump - 100", True, (255, 255, 255)), (420, 300))
+        if show_alert["higher_jump"]:
+            screen.blit(font_alert.render("❗", True, (255, 50, 50)), (900, 300))
+
+        screen.blit(font_option.render("3. Skip Level - 200", True, (200, 200, 200)), (420, 420))
+        if show_alert["skip_level"]:
+            screen.blit(font_alert.render("❗", True, (255, 50, 50)), (900, 420))
+
+        head_bar.update_coins(player_coins)
         head_bar.draw()
 
         pygame.display.flip()
+
+    return shop_effects
