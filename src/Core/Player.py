@@ -12,11 +12,7 @@ class Player:
 
         # ✅ 效果系统
         self.effects = effects or {}
-        self.effects = {
-            "money_collect": False,
-            "higher_jump": False,
-            "skip_level": False
-        }
+
         # ✅ 跳跃力（根据是否有 higher_jump 决定）
         self.base_jump_strength = 15
         self.high_jump_strength = 25
