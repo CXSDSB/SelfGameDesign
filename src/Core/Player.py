@@ -3,7 +3,7 @@ import pygame
 class Player:
     def __init__(self, x, y):
         self.radius = 30
-        self.color = (255, 0, 0)
+        self.color = (255, 255, 255)
         self.rect = pygame.Rect(x, y, self.radius * 2, self.radius * 2)
         self.vel_x = 0
         self.vel_y = 0
@@ -29,7 +29,7 @@ class Player:
         # 水平移动 + 横向碰撞
         self.rect.x += self.vel_x
         for rect, color in blocks:
-            if color == (139, 69, 19):
+            if color == (0,0,0):
                 if self.rect.colliderect(rect):
                     if self.vel_x > 0:
                         self.rect.right = rect.left
@@ -39,7 +39,7 @@ class Player:
         # 垂直移动 + 落地判断
         self.rect.y += self.vel_y
         for rect, color in blocks:
-            if color == (139, 69, 19):
+            if color == (0, 0, 0):
                 if self.rect.colliderect(rect):
                     if self.vel_y > 0 and rect.top <= self.rect.bottom <= rect.top + 30:
                         self.rect.bottom = rect.top

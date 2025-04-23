@@ -8,11 +8,11 @@ CURRENT_DIR = os.path.dirname(__file__)
 MAP_FILE = os.path.join(CURRENT_DIR, "mapDraw.json")
 COIN_IMAGE_PATH = os.path.abspath(os.path.join(CURRENT_DIR, "..", "UI", "icon", "iconCoin.png"))
 
-def get_levelE_blocks():
+def get_level3_blocks():
     blocks = []
     with open(MAP_FILE, "r") as f:
         data = json.load(f)
-    map_data = data["mapL2"]
+    map_data = data["mapL3"]
 
     for row_index, row in enumerate(map_data):
         for col_index, cell in enumerate(row):
@@ -31,19 +31,19 @@ def get_levelE_blocks():
 
     return blocks
 
-def get_levelE_coin_group():
+def get_level3_coin_group():
     coin_group = pygame.sprite.Group()
     with open(MAP_FILE, "r") as f:
         data = json.load(f)
-    map_data = data["mapL2"]
+    map_data = data["mapL3"]
 
-    print("=== 第E关金币生成 ===")
+    print("=== 第三关金币生成 ===")
     for row_index, row in enumerate(map_data):
         for col_index, cell in enumerate(row):
             if cell == "c":
                 x = col_index * TILE_SIZE
                 y = row_index * TILE_SIZE
-                print(f"[LE金币] at ({x}, {y})")
+                print(f"[L3金币] at ({x}, {y})")
                 coin = Coin((x, y), COIN_IMAGE_PATH, size=(TILE_SIZE, TILE_SIZE))
                 coin_group.add(coin)
 

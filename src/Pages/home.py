@@ -1,40 +1,50 @@
 import pygame
 import sys
+import os
+from UI.components.background_animator import BackgroundAnimator
 
 def run_home():
     pygame.init()
-    screen = pygame.display.set_mode((800, 600))
+    screen = pygame.display.set_mode((1280, 720))
     pygame.display.set_caption("NEXUS CORE")
     clock = pygame.time.Clock()
 
-    font_large = pygame.font.SysFont(None, 80)
-    font_medium = pygame.font.SysFont(None, 60)
-    font_small = pygame.font.SysFont(None, 30)
+    # ✅ 背景动画
+    bg_animator = BackgroundAnimator(screen)
 
-    ball_x = 400
-    ball_y = 360
-    ball_radius = 40
+    # ✅ 字体
+    font_large = pygame.font.SysFont(None, 112)
+    font_medium = pygame.font.SysFont(None, 84)
+    font_small = pygame.font.SysFont(None, 42)
+
+    # ✅ 小球设置
+    ball_x = 640
+    ball_y = 423
+    ball_radius = 56
     ball_speed = 0
 
     running = True
     while running:
-        screen.fill((0, 0, 0))
+        dt = clock.tick(60)
 
-        # --- 文字 ---
+        # --- 更新背景 ---
+        bg_animator.update(dt)
+        bg_animator.draw()
+
+        # --- 显示文字 ---
         title = font_large.render("NEXUS CORE", True, (255, 255, 255))
-        screen.blit(title, (230, 100))
-
-        screen.blit(font_small.render("Awaken the core. Traverse the unknown", True, (255, 255, 255)), (200, 410))
-        screen.blit(font_medium.render("NEW", True, (255, 255, 255)), (50, 410),)
-        screen.blit(font_medium.render("START", True, (255, 255, 255)), (640, 410))
+        screen.blit(title, (368, 120))
+        screen.blit(font_small.render("Awaken the core. Traverse the unknown", True, (255, 255, 255)), (320, 492))
+        screen.blit(font_medium.render("NEW", True, (255, 255, 255)), (80, 492))
+        screen.blit(font_medium.render("START", True, (255, 255, 255)), (1024, 492))
 
         # --- 分隔线 ---
-        pygame.draw.line(screen, (255, 255, 255), (0, 400), (800, 400), 4)
+        pygame.draw.line(screen, (255, 255, 255), (0, 480), (1280, 480), 4)
 
-        # --- 小球 ---
+        # --- 小球绘制 ---
         pygame.draw.circle(screen, (200, 200, 200), (int(ball_x), ball_y), ball_radius)
 
-        # --- 控制 ---
+        # --- 控制逻辑 ---
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             ball_speed = -5
@@ -44,19 +54,17 @@ def run_home():
             ball_speed = 0
 
         ball_x += ball_speed
-        ball_x = max(50, min(750, ball_x))  # 防止出界
+        ball_x = max(80, min(1200, ball_x))
 
-        # --- 判断是否到达左右两端 ---
-        if ball_x >= 700:
-            return "start"  # 启动主游戏
-        elif ball_x <= 100:
-            return "level_select"  # 进入关卡选择
+        # ✅ 检查是否滑到边缘并跳转
+        if ball_x >= 1120:
+            return "start"  # ➤ 向右滑进入游戏
+        elif ball_x <= 160:
+            return "level_select"  # ➤ 向左滑进入关卡选择
 
-        # --- 事件监听 ---
+        # --- 退出事件 ---
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                return None  # ✅ 不退出 pygame，让外部控制退出
 
         pygame.display.flip()
-        clock.tick(60)

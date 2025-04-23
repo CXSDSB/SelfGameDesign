@@ -1,52 +1,155 @@
 import pygame
-# 在 src/Core/gameRun.py 中
+import sys
 from Core.core import handle_player_movement
 from Core.Camera import Camera
 from Core.Player import Player
 from Core.level import load_map
-def run_game():
-    screen = pygame.display.set_mode((800, 600))
+from UI.components.headBar import HeadBar
+from UI.components.background_animator import BackgroundAnimator
+from Pages.ending import run_ending
+
+def run_game(start_level_num=1):
+    pygame.init()
+    screen = pygame.display.set_mode((1280, 720))
     pygame.display.set_caption("小球历险记")
     clock = pygame.time.Clock()
+
+    # ✅ 初始化背景动画器
+    bg_animator = BackgroundAnimator(screen)
+
+    # ✅ 初始化玩家、摄像机
     player = Player(100, 300)
-    camera = Camera(800, 600)
-    current_level = 1
-    blocks = load_map(current_level)
+    player.coins = 0
+    camera = Camera(1280, 720)
+
+    # ✅ 控制商店状态（暂停游戏）
+    in_shop = False
+
+    # ✅ 延迟导入，避免循环引用
+    from Pages.shop import run_shop
+    from Pages.home import run_home
+    from Pages.levelSelect import run_levelSelect
+
+    # ✅ 商店跳转逻辑
+    def go_shop():
+        nonlocal in_shop
+        in_shop = True
+        print("🛒 进入商店...")
+        run_shop(
+            player_coins=player.coins,
+            on_return=lambda: print("⬅️ 返回游戏")
+        )
+        in_shop = False
+
+    # ✅ 从关卡选择开始游戏
+    def start_level(lvl):
+        nonlocal current_level, blocks, coin_group
+        print(f"🎯 进入第 {lvl} 关")
+        current_level = lvl
+        player.rect.x = 100
+        player.rect.y = 300
+        player.vel_y = 0
+        camera.offset_x = 0
+        camera.offset_y = 0
+        blocks, coin_group = load_map(current_level)
+
+    # ✅ 首页跳转逻辑（不退出）
+    def go_home():
+        print("🏠 返回首页...")
+        result = run_home()
+
+        if result == "start":
+            print("🎮 用户滑动进入游戏")
+            run_game()
+        elif result == "level_select":
+            print("📜 用户进入关卡选择页")
+            run_levelSelect(
+                player_coins=player.coins,
+                on_return=go_home,
+                on_select_level=lambda lvl: start_level(lvl),
+                on_go_shop=go_shop
+            )
+        else:
+            print("🚪 用户关闭窗口或未选择任何项")
+
+    # ✅ 初始化 HeadBar，绑定点击行为
+    head_bar = HeadBar(
+        screen,
+        coin_count=player.coins,
+        on_go_shop=go_shop,
+        on_go_home=go_home
+    )
+
+    # ✅ 初始地图加载（砖块 + 金币）
+    current_level = start_level_num
+    blocks, coin_group = load_map(current_level)
 
     running = True
     while running:
-        clock.tick(60)
+        dt = clock.tick(60)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and player.jump_count < 2:
-                    player.vel_y = -15
-                    player.jump_count += 1
+            elif not in_shop:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE and player.jump_count < 2:
+                        player.vel_y = -15
+                        player.jump_count += 1
+                head_bar.handle_event(event)
 
-        handle_player_movement(player)
-        player.apply_gravity()
-        player.update_position(blocks)
+        if not in_shop:
+            handle_player_movement(player)
+            player.apply_gravity()
+            player.update_position(blocks)
 
-        level_width = 24 * 48
-        if player.rect.x > level_width:
-            current_level += 1
-            blocks = load_map(current_level)
-            player.rect.x = 100
-            player.rect.y = 300
-            camera.offset_x = 0
-            camera.offset_y = 0
-        if player.rect.x < 0:
-            player.rect.x = 0
-            player.vel_x = 0
+            # ✅ 添加：检测金币碰撞
+            for coin in coin_group:
+                if coin.rect.colliderect(player.rect):
+                    coin.collect()
+                    player.coins += 5
 
-        camera.update(player)
-        screen.fill((255, 255, 255))
+            level_width = 48 * 48
+            if player.rect.x > level_width:
+                current_level += 1
+                if current_level > 4:  # 假设第4关是最后一关
+                    print("🎉 通关！显示Ending页面")
+                    ending_page = run_ending(screen)
+                    ending_page.run()
+                    running = False  # 停止游戏循环
+                else:
+                    blocks, coin_group = load_map(current_level)
+                    player.rect.x = 100
+                    player.rect.y = 300
+                    camera.offset_x = 0
+                    camera.offset_y = 0
+
+            if player.rect.x < 0:
+                player.rect.x = 0
+                player.vel_x = 0
+
+            camera.update(player)
+
+        bg_animator.update(dt)
+        bg_animator.draw()
+
+        # ✅ 绘制金币（考虑相机偏移）
+        if coin_group:
+            for coin in coin_group:
+                draw_x = coin.rect.x - camera.offset_x
+                draw_y = coin.rect.y - camera.offset_y
+                screen.blit(coin.image, (draw_x, draw_y))
+
+        # ✅ 绘制砖块
         for rect, color in blocks:
             draw_x = rect.x - camera.offset_x
             draw_y = rect.y - camera.offset_y
             pygame.draw.rect(screen, color, (draw_x, draw_y, rect.width, rect.height))
 
-        player.draw(screen, camera)
+        if not in_shop:
+            player.draw(screen, camera)
+
+        head_bar.update_coins(player.coins)
+        head_bar.draw()
+
         pygame.display.flip()
