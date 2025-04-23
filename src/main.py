@@ -13,7 +13,7 @@ def go_shop_page():
 
 def main():
     pygame.init()
-
+    pygame.mixer.init()
     while True:
         result = run_home()
 

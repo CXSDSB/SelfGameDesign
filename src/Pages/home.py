@@ -2,8 +2,9 @@ import pygame
 import sys
 import os
 from UI.components.background_animator import BackgroundAnimator
-
+from Core.musicManager import MusicManager
 def run_home():
+    MusicManager.play_music("titlescreen.wav", volume=0.5)
     pygame.init()
     screen = pygame.display.set_mode((1280, 720))
     pygame.display.set_caption("NEXUS CORE")
