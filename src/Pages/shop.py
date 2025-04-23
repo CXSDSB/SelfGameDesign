@@ -102,15 +102,15 @@ def run_shop(player_coins=0, on_return=None):
         # 商品选项 + 红色感叹号提示
         screen.blit(font_option.render("1. Money Collect - 50", True, (255, 255, 255)), (420, 220))
         if show_alert["money_collect"]:
-            screen.blit(font_alert.render("❗", True, (255, 50, 50)), (900, 220))
+            screen.blit(font_alert.render("short of money", True, (255, 50, 50)), (900, 220))
 
         screen.blit(font_option.render("2. Higher Jump - 100", True, (255, 255, 255)), (420, 300))
         if show_alert["higher_jump"]:
-            screen.blit(font_alert.render("❗", True, (255, 50, 50)), (900, 300))
+            screen.blit(font_alert.render("short of money", True, (255, 50, 50)), (900, 300))
 
         screen.blit(font_option.render("3. Skip Level - 200", True, (200, 200, 200)), (420, 420))
         if show_alert["skip_level"]:
-            screen.blit(font_alert.render("❗", True, (255, 50, 50)), (900, 420))
+            screen.blit(font_alert.render("short of money", True, (255, 50, 50)), (900, 420))
 
         head_bar.update_coins(player_coins)
         head_bar.draw()
