@@ -1,7 +1,7 @@
 
 import os
 import pygame
-
+from Core.soundEffectManager import SoundEffectManager  # ✅ 导入新类
 class Coin(pygame.sprite.Sprite):
     def __init__(self, pos, image_path, size=(48, 48)):
         super().__init__()
@@ -19,3 +19,4 @@ class Coin(pygame.sprite.Sprite):
     def collect(self):
         self.collected = True
         self.kill()  # ✅ 从精灵组中移除，画面自动消失
+        SoundEffectManager.play_effect("nav.wav")  # ✅ 播放金币音效
