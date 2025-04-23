@@ -1,14 +1,24 @@
 import pygame
 
 class Player:
-    def __init__(self, x, y):
+    def __init__(self, x, y, effects=None):
         self.radius = 30
         self.color = (255, 255, 255)
         self.rect = pygame.Rect(x, y, self.radius * 2, self.radius * 2)
         self.vel_x = 0
         self.vel_y = 0
-        self.on_ground = False  # 是否在地面上
-        self.jump_count = 0     # ✅ 当前跳跃次数（最多2次）
+        self.on_ground = False
+        self.jump_count = 0
+
+        # ✅ 效果系统
+        self.effects = effects or {}
+
+        # ✅ 跳跃力（根据是否有 higher_jump 决定）
+        self.base_jump_strength = 15
+        self.high_jump_strength = 25
+        self.jump_strength = (
+            self.high_jump_strength if self.effects.get("higher_jump") else self.base_jump_strength
+        )
 
     def draw(self, surface, camera):
         draw_x = self.rect.x - camera.offset_x
@@ -29,7 +39,7 @@ class Player:
         # 水平移动 + 横向碰撞
         self.rect.x += self.vel_x
         for rect, color in blocks:
-            if color == (0,0,0):
+            if color == (0, 0, 0):
                 if self.rect.colliderect(rect):
                     if self.vel_x > 0:
                         self.rect.right = rect.left
