@@ -3,7 +3,6 @@ import sys
 import os
 from UI.components.background_animator import BackgroundAnimator
 from UI.components.headBar import HeadBar  # ✅ 引入 HeadBar
-from Core.soundEffectManager import SoundEffectManager  # ✅ 导入新类
 
 def run_shop(player_coins=0, on_return=None):
     pygame.init()
@@ -43,7 +42,7 @@ def run_shop(player_coins=0, on_return=None):
         "skip_level": 200
     }
 
-    # ✅ 警告提示（商品名称 → 是否金币不足）
+    # ✅ 红色警告提示（商品名称 → 是否金币不足）
     show_alert = {
         "money_collect": False,
         "higher_jump": False,
@@ -71,7 +70,6 @@ def run_shop(player_coins=0, on_return=None):
                             player_coins -= prices["money_collect"]
                             show_alert["money_collect"] = False
                         else:
-                            SoundEffectManager.play_effect("select.wav")
                             print("❗ 金币不足购买 Money Collect")
                             show_alert["money_collect"] = True
                     elif 300 <= y <= 340:
@@ -81,7 +79,6 @@ def run_shop(player_coins=0, on_return=None):
                             player_coins -= prices["higher_jump"]
                             show_alert["higher_jump"] = False
                         else:
-                            SoundEffectManager.play_effect("select.wav")
                             print("❗ 金币不足购买 Higher Jump")
                             show_alert["higher_jump"] = True
                     elif 420 <= y <= 460:
@@ -91,7 +88,6 @@ def run_shop(player_coins=0, on_return=None):
                             player_coins -= prices["skip_level"]
                             show_alert["skip_level"] = False
                         else:
-                            SoundEffectManager.play_effect("select.wav")
                             print("❗ 金币不足购买 Skip Level")
                             show_alert["skip_level"] = True
 
@@ -106,15 +102,15 @@ def run_shop(player_coins=0, on_return=None):
         # 商品选项 + 红色感叹号提示
         screen.blit(font_option.render("1. Money Collect - 50", True, (255, 255, 255)), (420, 220))
         if show_alert["money_collect"]:
-            screen.blit(font_alert.render("short of money", True, (255, 50, 50)), (900, 220))
+            screen.blit(font_alert.render("❗", True, (255, 50, 50)), (900, 220))
 
         screen.blit(font_option.render("2. Higher Jump - 100", True, (255, 255, 255)), (420, 300))
         if show_alert["higher_jump"]:
-            screen.blit(font_alert.render("short of money", True, (255, 50, 50)), (900, 300))
+            screen.blit(font_alert.render("❗", True, (255, 50, 50)), (900, 300))
 
         screen.blit(font_option.render("3. Skip Level - 200", True, (200, 200, 200)), (420, 420))
         if show_alert["skip_level"]:
-            screen.blit(font_alert.render("short of money", True, (255, 50, 50)), (900, 420))
+            screen.blit(font_alert.render("❗", True, (255, 50, 50)), (900, 420))
 
         head_bar.update_coins(player_coins)
         head_bar.draw()
