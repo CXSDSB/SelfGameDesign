@@ -41,7 +41,7 @@ def run_game(start_level_num=1):
         in_shop = True
         print("🛒 进入商店...")
         run_shop(
-            player_coins=player.coins,
+            player=player,
             on_return=lambda: print("⬅️ 返回游戏")
         )
         in_shop = False
@@ -103,7 +103,8 @@ def run_game(start_level_num=1):
             elif not in_shop:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE and player.jump_count < 2:
-                        player.vel_y = -15
+                        jump_strength = -20 if player.effects["higher_jump"] else -15
+                        player.vel_y = jump_strength
                         player.jump_count += 1
                 head_bar.handle_event(event)
 
@@ -113,10 +114,14 @@ def run_game(start_level_num=1):
             player.update_position(blocks)
 
             # ✅ 添加：检测金币碰撞
+
             for coin in coin_group:
                 if coin.rect.colliderect(player.rect):
                     coin.collect()
-                    player.coins += 5
+                    if player.effects["money_collect"]:
+                        player.coins += 10  # 买了以后每次 +10
+                    else:
+                        player.coins += 5
 
             # ✅ 检查按钮和掉落墙的触发
             check_button_wall_trigger(player, button_group, dropwall_group)
