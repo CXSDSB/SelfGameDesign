@@ -2,6 +2,9 @@ import pygame
 import json
 import os
 from Environment.obstacles import Coin
+# 新增：获取第二关按钮和可掉落墙体的函数
+from Environment.Button import Button
+from Environment.dropwall import DropWall
 
 TILE_SIZE = 48
 CURRENT_DIR = os.path.dirname(__file__)
@@ -9,6 +12,7 @@ MAP_FILE = os.path.join(CURRENT_DIR, "mapDraw.json")
 COIN_IMAGE_PATH = os.path.abspath(os.path.join(CURRENT_DIR, "..", "UI", "icon", "iconCoin.png"))
 
 def get_level2_blocks():
+    print("=== get_level2_objects() 正在执行！===")
     blocks = []
     with open(MAP_FILE, "r") as f:
         data = json.load(f)
@@ -48,3 +52,27 @@ def get_level2_coin_group():
                 coin_group.add(coin)
 
     return coin_group
+
+
+
+def get_level2_objects():
+    button_group = pygame.sprite.Group()
+    dropwall_group = pygame.sprite.Group()
+
+    with open(MAP_FILE, "r") as f:
+        data = json.load(f)
+    map_data = data["mapL2"]
+
+    for row_index, row in enumerate(map_data):
+        for col_index, cell in enumerate(row):
+            x = col_index * TILE_SIZE
+            y = row_index * TILE_SIZE
+
+            if cell == "B":
+                button = Button((x, y))
+                button_group.add(button)
+            elif cell == "D":
+                wall = DropWall((x, y))
+                dropwall_group.add(wall)
+
+    return button_group, dropwall_group

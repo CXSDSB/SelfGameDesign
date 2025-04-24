@@ -1,5 +1,5 @@
 from Map.mStart import get_start_blocks, get_coin_group  # 导入金币方法
-from Map.mL2Gravity import get_level2_blocks
+from Map.mL2Gravity import get_level2_blocks,get_level2_objects
 from Map.mL3Float import get_level3_blocks
 from Map.mEnd import get_levelE_blocks
 
