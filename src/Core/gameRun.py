@@ -4,6 +4,7 @@ from Core.Camera import Camera
 from Core.Player import Player
 from Map.mL2Gravity import get_level2_objects
 from Core.level import load_map
+from Map.mL3Float import get_level3_objects
 from UI.components.headBar import HeadBar
 from UI.components.background_animator import BackgroundAnimator
 from Pages.ending import run_ending
@@ -55,6 +56,8 @@ def run_game(start_level_num=1):
             blocks, coin_group = load_map(current_level)
             if current_level == 2:
                 button_group, dropwall_group = get_level2_objects()
+            elif current_level == 3:
+                button_group, dropwall_group = get_level3_objects()
             else:
                 button_group = pygame.sprite.Group()
                 dropwall_group = pygame.sprite.Group()
@@ -70,8 +73,12 @@ def run_game(start_level_num=1):
         camera.offset_x = 0
         camera.offset_y = 0
         blocks, coin_group = load_map(current_level)
+        button_group = pygame.sprite.Group()
+        dropwall_group = pygame.sprite.Group()
         if lvl == 2:
             button_group, dropwall_group = get_level2_objects()
+        elif lvl == 3:
+            button_group, dropwall_group = get_level3_objects()
         else:
             button_group = pygame.sprite.Group()
             dropwall_group = pygame.sprite.Group()
@@ -154,6 +161,8 @@ def run_game(start_level_num=1):
                         blocks, coin_group = load_map(current_level)
                         if current_level == 2:
                             button_group, dropwall_group = get_level2_objects()
+                        elif current_level == 3:
+                            button_group, dropwall_group = get_level3_objects()
                         player.rect.x = 100
                         player.rect.y = 300
                         camera.offset_x = 0

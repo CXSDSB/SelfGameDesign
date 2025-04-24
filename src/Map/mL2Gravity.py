@@ -57,8 +57,6 @@ def get_level2_coin_group():
 
     return coin_group
 
-
-
 def get_level2_objects():
     button_group = pygame.sprite.Group()
     dropwall_group = pygame.sprite.Group()
