@@ -35,7 +35,7 @@ def get_levelE_coin_group():
     coin_group = pygame.sprite.Group()
     with open(MAP_FILE, "r") as f:
         data = json.load(f)
-    map_data = data["mapL2"]
+    map_data = data["mapLE"]
 
     print("=== 第E关金币生成 ===")
     for row_index, row in enumerate(map_data):

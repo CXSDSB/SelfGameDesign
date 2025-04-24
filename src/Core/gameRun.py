@@ -1,5 +1,4 @@
 import pygame
-import sys
 from Core.core import handle_player_movement
 from Core.Camera import Camera
 from Core.Player import Player
@@ -8,7 +7,6 @@ from Core.level import load_map
 from UI.components.headBar import HeadBar
 from UI.components.background_animator import BackgroundAnimator
 from Pages.ending import run_ending
-
 
 def run_game(start_level_num=1):
     pygame.init()
@@ -37,14 +35,29 @@ def run_game(start_level_num=1):
 
     # ✅ 商店跳转逻辑
     def go_shop():
-        nonlocal in_shop
+        nonlocal in_shop, current_level, blocks, coin_group, button_group, dropwall_group
         in_shop = True
         print("🛒 进入商店...")
-        run_shop(
+        shop_effects = run_shop(
             player=player,
             on_return=lambda: print("⬅️ 返回游戏")
         )
         in_shop = False
+
+        if shop_effects and shop_effects.get("skip_level"):
+            print("⏩ 玩家购买了跳关道具！即将进入下一关")
+            current_level += 1
+            player.rect.x = 100
+            player.rect.y = 300
+            player.vel_y = 0
+            camera.offset_x = 0
+            camera.offset_y = 0
+            blocks, coin_group = load_map(current_level)
+            if current_level == 2:
+                button_group, dropwall_group = get_level2_objects()
+            else:
+                button_group = pygame.sprite.Group()
+                dropwall_group = pygame.sprite.Group()
 
     # ✅ 从关卡选择开始游戏
     def start_level(lvl):
