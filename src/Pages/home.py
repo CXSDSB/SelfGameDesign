@@ -1,6 +1,4 @@
 import pygame
-import sys
-import os
 from UI.components.background_animator import BackgroundAnimator
 from Core.musicManager import MusicManager
 def run_home():
