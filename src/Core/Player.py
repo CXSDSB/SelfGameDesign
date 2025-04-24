@@ -1,5 +1,7 @@
 import pygame
 
+OBSTACLE_COLORS = [(0, 0, 0), (169, 169, 169)]
+
 class Player:
     def __init__(self, x, y, effects=None):
         self.radius = 30
@@ -12,7 +14,11 @@ class Player:
 
         # ✅ 效果系统
         self.effects = effects or {}
-
+        self.effects = {
+            "money_collect": False,
+            "higher_jump": False,
+            "skip_level": False
+        }
         # ✅ 跳跃力（根据是否有 higher_jump 决定）
         self.base_jump_strength = 15
         self.high_jump_strength = 25
@@ -39,7 +45,7 @@ class Player:
         # 水平移动 + 横向碰撞
         self.rect.x += self.vel_x
         for rect, color in blocks:
-            if color == (0, 0, 0):
+            if color in OBSTACLE_COLORS:
                 if self.rect.colliderect(rect):
                     if self.vel_x > 0:
                         self.rect.right = rect.left
@@ -49,7 +55,7 @@ class Player:
         # 垂直移动 + 落地判断
         self.rect.y += self.vel_y
         for rect, color in blocks:
-            if color == (0, 0, 0):
+            if color in OBSTACLE_COLORS:
                 if self.rect.colliderect(rect):
                     if self.vel_y > 0 and rect.top <= self.rect.bottom <= rect.top + 30:
                         self.rect.bottom = rect.top
