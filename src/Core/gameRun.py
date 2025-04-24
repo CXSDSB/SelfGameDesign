@@ -124,26 +124,28 @@ def run_game(start_level_num=1):
                         player.coins += 5
 
             # ✅ 检查按钮和掉落墙的触发
-            check_button_wall_trigger(player, button_group, dropwall_group)
+            check_button_wall_trigger(player, button_group, dropwall_group, blocks)
 
             level_width = 48 * 48
             if player.rect.x > level_width:
 
-
-                if current_level >= 4:  # 假设第4关是最后一关
-                    print("🎉 通关！显示Ending页面")
-                    ending_page = run_ending(screen)
-                    ending_page.run()
-                    running = False  # 停止游戏循环
-                else:
-                    current_level += 1
-                    blocks, coin_group = load_map(current_level)
-                    if current_level == 2:
-                        button_group, dropwall_group = get_level2_objects()
-                    player.rect.x = 100
-                    player.rect.y = 300
-                    camera.offset_x = 0
-                    camera.offset_y = 0
+                if player.rect.x > level_width:
+                    camera.freeze = True  # ✅ 冻结摄像头
+                    if current_level >= 4:
+                        print("🎉 通关！显示Ending页面")
+                        ending_page = run_ending(screen)
+                        ending_page.run()
+                        running = False  # 停止游戏循环
+                    else:
+                        current_level += 1
+                        blocks, coin_group = load_map(current_level)
+                        if current_level == 2:
+                            button_group, dropwall_group = get_level2_objects()
+                        player.rect.x = 100
+                        player.rect.y = 300
+                        camera.offset_x = 0
+                        camera.offset_y = 0
+                        # camera.freeze = False  # ✅ 解冻摄像头，进入下一关
 
             if player.rect.x < 0:
                 player.rect.x = 0
@@ -169,9 +171,14 @@ def run_game(start_level_num=1):
 
         # ✅ 绘制掉落墙
         for wall in dropwall_group:
-            draw_x = wall.rect.x - camera.offset_x
-            draw_y = wall.rect.y - camera.offset_y
-            screen.blit(wall.image, (draw_x, draw_y))
+            wall.rect.x -= camera.offset_x
+            wall.rect.y -= camera.offset_y
+
+        dropwall_group.draw(screen)  # 自动忽略已 kill 的墙
+
+        for wall in dropwall_group:
+            wall.rect.x += camera.offset_x
+            wall.rect.y += camera.offset_y
 
         # ✅ 绘制砖块
         for rect, color in blocks:
@@ -189,9 +196,9 @@ def run_game(start_level_num=1):
 
 
 # ✅ 检查按钮与掉落墙的触发函数
-def check_button_wall_trigger(player, button_group, dropwall_group):
+def check_button_wall_trigger(player, button_group, dropwall_group, blocks):
     for button in button_group:
         if player.rect.colliderect(button.rect) and not button.activated:
             button.activate()
             for wall in dropwall_group:
-                wall.destroy()  # 所有墙都掉落
+                wall.destroy(blocks)  # 所有墙都掉落

@@ -20,7 +20,7 @@ def get_level2_blocks():
 
     for row_index, row in enumerate(map_data):
         for col_index, cell in enumerate(row):
-            if cell in ["x", "e", "w"]:  # ✅ 不再绘制 "c"，而是交给 Coin 精灵系统
+            if cell in ["x", "e", "w", "D"]:  # ✅ 不再绘制 "c"，而是交给 Coin 精灵系统
                 x = col_index * TILE_SIZE
                 y = row_index * TILE_SIZE
                 rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE)
@@ -31,8 +31,12 @@ def get_level2_blocks():
                     color = (255, 0, 0)
                 elif cell == "w":
                     color = (0, 191, 255)
+                elif cell == "D":
+                    color = (169,169,169)
                 blocks.append((rect, color))
-
+    for rect, color in blocks:
+        if color == (169, 169, 169):
+            print(f"✅ Found grey block at: {rect}")
     return blocks
 
 def get_level2_coin_group():
