@@ -6,7 +6,7 @@ from UI.components.headBar import HeadBar  # ✅ 引入 HeadBar
 from Core.soundEffectManager import SoundEffectManager  # ✅ 导入新类
 
 def run_shop(player_coins=0, on_return=None):
-    pygame.init()
+    # pygame.init()
     screen = pygame.display.set_mode((1280, 720))
     pygame.display.set_caption("SHOP - NEXUS CORE")
     clock = pygame.time.Clock()
@@ -66,6 +66,7 @@ def run_shop(player_coins=0, on_return=None):
                 if 420 <= x <= 900:
                     if 220 <= y <= 260:
                         if player_coins >= prices["money_collect"]:
+                            SoundEffectManager.play_effect("buy.wav")
                             print("✅ 购买 Money Collect")
                             shop_effects["money_collect"] = True
                             player_coins -= prices["money_collect"]
@@ -76,6 +77,7 @@ def run_shop(player_coins=0, on_return=None):
                             show_alert["money_collect"] = True
                     elif 300 <= y <= 340:
                         if player_coins >= prices["higher_jump"]:
+                            SoundEffectManager.play_effect("buy.wav")
                             print("✅ 购买 Higher Jump")
                             shop_effects["higher_jump"] = True
                             player_coins -= prices["higher_jump"]
@@ -86,6 +88,7 @@ def run_shop(player_coins=0, on_return=None):
                             show_alert["higher_jump"] = True
                     elif 420 <= y <= 460:
                         if player_coins >= prices["skip_level"]:
+                            SoundEffectManager.play_effect("buy.wav")
                             print("✅ 购买 Skip Level")
                             shop_effects["skip_level"] = True
                             player_coins -= prices["skip_level"]
