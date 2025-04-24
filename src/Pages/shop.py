@@ -5,7 +5,7 @@ from UI.components.background_animator import BackgroundAnimator
 from UI.components.headBar import HeadBar  # ✅ 引入 HeadBar
 from Core.soundEffectManager import SoundEffectManager  # ✅ 导入新类
 
-def run_shop(player_coins=0, on_return=None):
+def run_shop(player, on_return):
     # pygame.init()
     screen = pygame.display.set_mode((1280, 720))
     pygame.display.set_caption("SHOP - NEXUS CORE")
@@ -25,7 +25,7 @@ def run_shop(player_coins=0, on_return=None):
 
     head_bar = HeadBar(
         screen,
-        coin_count=player_coins,
+        coin_count=player.coins,
         on_go_shop=go_back,
         on_go_home=go_back
     )
@@ -38,9 +38,9 @@ def run_shop(player_coins=0, on_return=None):
 
     # ✅ 商品价格
     prices = {
-        "money_collect": 50,
-        "higher_jump": 100,
-        "skip_level": 200
+        "money_collect": 5,
+        "higher_jump": 10,
+        "skip_level": 20
     }
 
     # ✅ 警告提示（商品名称 → 是否金币不足）
@@ -65,39 +65,39 @@ def run_shop(player_coins=0, on_return=None):
                 x, y = event.pos
                 if 420 <= x <= 900:
                     if 220 <= y <= 260:
-                        if player_coins >= prices["money_collect"]:
+                        if player.coins >= prices["money_collect"]:
                             SoundEffectManager.play_effect("buy.wav")
                             print("✅ 购买 Money Collect")
                             shop_effects["money_collect"] = True
-                            player_coins -= prices["money_collect"]
+                            player.coins -= prices["money_collect"]
                             show_alert["money_collect"] = False
                         else:
                             SoundEffectManager.play_effect("select.wav")
                             print("❗ 金币不足购买 Money Collect")
                             show_alert["money_collect"] = True
                     elif 300 <= y <= 340:
-                        if player_coins >= prices["higher_jump"]:
+                        if player.coins >= prices["higher_jump"]:
                             SoundEffectManager.play_effect("buy.wav")
                             print("✅ 购买 Higher Jump")
                             shop_effects["higher_jump"] = True
-                            player_coins -= prices["higher_jump"]
+                            player.coins -= prices["higher_jump"]
                             show_alert["higher_jump"] = False
                         else:
                             SoundEffectManager.play_effect("select.wav")
                             print("❗ 金币不足购买 Higher Jump")
                             show_alert["higher_jump"] = True
                     elif 420 <= y <= 460:
-                        if player_coins >= prices["skip_level"]:
+                        if player.coins >= prices["skip_level"]:
                             SoundEffectManager.play_effect("buy.wav")
                             print("✅ 购买 Skip Level")
                             shop_effects["skip_level"] = True
-                            player_coins -= prices["skip_level"]
+                            player.coins -= prices["skip_level"]
                             show_alert["skip_level"] = False
                         else:
                             SoundEffectManager.play_effect("select.wav")
                             print("❗ 金币不足购买 Skip Level")
                             show_alert["skip_level"] = True
-
+            player.effects = shop_effects
             head_bar.handle_event(event)
 
         bg_animator.update(dt)
@@ -107,19 +107,19 @@ def run_shop(player_coins=0, on_return=None):
         screen.blit(title, (560, 80))
 
         # 商品选项 + 红色感叹号提示
-        screen.blit(font_option.render("1. Money Collect - 50", True, (255, 255, 255)), (420, 220))
+        screen.blit(font_option.render("1. Money Collect - 5", True, (255, 255, 255)), (420, 220))
         if show_alert["money_collect"]:
             screen.blit(font_alert.render("short of money", True, (255, 50, 50)), (900, 220))
 
-        screen.blit(font_option.render("2. Higher Jump - 100", True, (255, 255, 255)), (420, 300))
+        screen.blit(font_option.render("2. Higher Jump - 10", True, (255, 255, 255)), (420, 300))
         if show_alert["higher_jump"]:
             screen.blit(font_alert.render("short of money", True, (255, 50, 50)), (900, 300))
 
-        screen.blit(font_option.render("3. Skip Level - 200", True, (200, 200, 200)), (420, 420))
+        screen.blit(font_option.render("3. Skip Level - 20", True, (200, 200, 200)), (420, 420))
         if show_alert["skip_level"]:
             screen.blit(font_alert.render("short of money", True, (255, 50, 50)), (900, 420))
 
-        head_bar.update_coins(player_coins)
+        head_bar.update_coins(player.coins)
         head_bar.draw()
 
         pygame.display.flip()
